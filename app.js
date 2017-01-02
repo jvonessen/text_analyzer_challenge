@@ -1,13 +1,25 @@
-var totalText = document.getElementsByName("user-text")[0].value;
-var textSlice = totalText.slice(0,-1);
-var countSplit = textSlice.split(/[ ,!.";:-]+/);
-var letterSplit = textSlice.split(/[ ,!.";:-]+/);
-var sentenceSplit = textSlice.split(/[.?!]+/);
+$('#text-box').submit(function(event) {
+  event.preventDefault();
+  $('.text-report').removeClass('hidden');
 
-function wordCount(){
-  var numOfWords = countSplit.length;
-  $("#js-word-count-result").html('<p>' + numOfWords + '</p>');
+  var totalText = document.getElementsByName("user-text")[0].value;
+  var textSlice = totalText.trim().slice(0,-1);
+  var countSplit = textSlice.split(/[ ,!.";:-]+/);
+  var letterSplit = textSlice.split(/[ ,!.";:-]+/);
+  var sentenceSplit = textSlice.split(/[.?!]+/);
+
+  $("#js-word-count-result").html('<p>' + wordCount(textSlice) + '</p>');
+  $("#js-unique-result").html('<p>' + unique(countSplit) + '</p>');
+  $("#js-word-length-result").html('<p>' + wordLength(letterSplit) + ' letters </p>');
+  $("#js-sentence-result").html('<p>' + sentence(sentenceSplit) + ' words </p>');
+
+});
+
+
+function wordCount(text){
+  return text.split(/[ ,!.";:-]+/).length;
 };
+
 
 function unique(words){
   var uniqueWords = [];
@@ -18,9 +30,9 @@ function unique(words){
       uniqueWords.push(words[i]);
     };
   };
-  var numOfUnique = uniqueWords.length;
-  $("#js-unique-result").html('<p>' + numOfUnique + '</p>');
+  return uniqueWords.length;
 };
+
 
 function wordLength(wordArray){
   var wordTotal = 0;
@@ -28,9 +40,9 @@ function wordLength(wordArray){
     var letterCount = wordArray[i].split("");
     wordTotal += letterCount.length;
   };
-  var wordAverage = wordTotal / wordArray.length;
-  $("#js-word-length-result").html('<p>' + wordAverage + ' letters </p>');
+  return wordTotal / wordArray.length;
 };
+
 
 function sentence(sentArray) {
   var sentenceTotal = 0;
@@ -38,17 +50,5 @@ function sentence(sentArray) {
     var sentLength = sentArray[i].split(' ');
     sentenceTotal += sentLength.length;
   };
-  var sentenceAverage = sentenceTotal / sentArray.length;
-  $("#js-sentence-result").html('<p>' + sentenceAverage + ' words </p>');
+  return sentenceTotal / sentArray.length;
 };
-
-
-$('#text-box').submit(function(event) {
-  event.preventDefault();
-  $('.text-report').removeClass('hidden');
-
-  wordCount();
-  wordLength(letterSplit);
-  unique(countSplit);
-  sentence(sentenceSplit);
-});
